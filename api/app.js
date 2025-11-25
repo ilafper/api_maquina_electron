@@ -46,8 +46,6 @@ app.get('/api/productos', async (req, res) => {
   }
 });
 
-
-
 //Crear productos
 app.post('/api/crearproducto', async (req, res) => {
   const nuevoProducto = req.body;
@@ -61,5 +59,20 @@ app.post('/api/crearproducto', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor al crear el producto' });
   }
 });
+
+
+//eliminar producto por id
+app.delete("/api/deleteusuarios/:id", async (req, res) => {
+    try {
+        const producto_eliminado = await Usuario.findByIdAndDelete(req.params.id);
+        if (!producto_eliminado) return res.status(404).json({ error: "Usuario no encontrado" });
+        res.json({ mensaje: "Usuario eliminado correctamente" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+
+
 
 module.exports = app;
