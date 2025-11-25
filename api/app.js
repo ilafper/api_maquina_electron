@@ -83,7 +83,8 @@ app.delete('/api/delete/:id', async (req, res) => {
 
 
 // Actualizar producto por ID
-app.put("/actuproducto/:id", async (req, res) => {
+
+app.put("/api/actuproducto/:id", async (req, res) => {
     const { id } = req.params; 
     const datosActualizados = req.body;
     try {
