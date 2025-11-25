@@ -62,15 +62,26 @@ app.post('/api/crearproducto', async (req, res) => {
 
 
 //eliminar producto por id
-app.delete("/api/deleteusuarios/:id", async (req, res) => {
-    try {
-        const producto_eliminado = await Usuario.findByIdAndDelete(req.params.id);
-        if (!producto_eliminado) return res.status(404).json({ error: "Usuario no encontrado" });
-        res.json({ mensaje: "Usuario eliminado correctamente" });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+
+// Borrar un producto por ID
+app.delete('/api/delete/:id', async (req, res) => {
+    //recivir la url
+  const { id } = req.params;
+  try {
+    const { productos } = await connectToMongoDB();
+    const resultado = await productos.deleteOne({ _id: new ObjectId(id) });
+
+    if (resultado.deletedCount === 0) {
+      return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
+
+    res.json({ mensaje: 'Producto eliminado correctamente' });
+  } catch (error) {
+    console.error("Error al eliminar el producto:", error);
+    res.status(500).json({ error: 'Error interno del servidor al eliminar el producto' });
+  }
 });
+
 
 
 
