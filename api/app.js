@@ -63,7 +63,6 @@ app.post('/api/crearproducto', async (req, res) => {
 
 //eliminar producto por id
 
-// Borrar un producto por ID
 app.delete('/api/delete/:id', async (req, res) => {
     //recivir la url
   const { id } = req.params;
@@ -81,6 +80,30 @@ app.delete('/api/delete/:id', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor al eliminar el producto' });
   }
 });
+
+
+// Actualizar producto por ID
+app.put("/actuproducto/:id", async (req, res) => {
+    const { id } = req.params; 
+    const datosActualizados = req.body;
+    try {
+        const { productos } = await connectToMongoDB();
+        const resultado = await productos.updateOne(
+            { _id: new ObjectId(id) }, 
+            { $set: datosActualizados }
+        );
+
+        if (resultado.matchedCount === 0) {
+            return res.status(404).json({ error: "Producto no encontrado" });
+        }
+
+        res.json({ mensaje: "Producto actualizado ISISISIS" });
+    } catch (error) {
+        console.error("NONNNONONO", error);
+        res.status(500).json({ error: "Error servidor nONONONO" });
+    }
+});
+
 
 
 
