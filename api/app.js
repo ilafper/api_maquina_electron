@@ -19,7 +19,7 @@ async function connectToMongoDB() {
     console.log("ESta conectado, Go go go go");
     const db = client.db('MaquinaElectron');
     return {
-      productos: db.collection('productos'),
+      productos: db.collection('producto'),
     };
   } catch (error) {
     console.error("Error al conectar a MongoDB:", error);
