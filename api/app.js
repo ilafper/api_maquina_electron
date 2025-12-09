@@ -36,6 +36,8 @@ app.use((req, res, next) => {
 
 
 //Obtener todos los PRoductos
+
+
 app.get('/api/productos', async (req, res) => {
   try {
     const { productos } = await connectToMongoDB();
@@ -60,9 +62,7 @@ app.post('/api/crearproducto', async (req, res) => {
   }
 });
 
-
 //eliminar producto por id
-
 app.delete('/api/delete/:id', async (req, res) => {
     //recivir la url
   const { id } = req.params;
