@@ -60,12 +60,13 @@ app.post('/api/crearproducto', async (req, res) => {
     console.error("Error al guardar el producto en MongoDB:", error);
     res.status(500).json({ error: 'Error interno del servidor al crear el producto' });
   }
+
 });
 
 //eliminar producto por id
 app.delete('/api/delete/:id', async (req, res) => {
-    //recivir la url
-  const { id } = req.body;
+  //recivir la url
+  const { id } = req.params;
   try {
     const { productos } = await connectToMongoDB();
     const resultado = await productos.deleteOne({ _id: new ObjectId(id) });
