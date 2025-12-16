@@ -65,7 +65,7 @@ app.post('/api/crearproducto', async (req, res) => {
 //eliminar producto por id
 app.delete('/api/delete/:id', async (req, res) => {
     //recivir la url
-  const { id } = req.params;
+  const { id } = req.body;
   try {
     const { productos } = await connectToMongoDB();
     const resultado = await productos.deleteOne({ _id: new ObjectId(id) });
@@ -82,8 +82,10 @@ app.delete('/api/delete/:id', async (req, res) => {
 });
 
 
-// Actualizar producto por ID
 
+
+
+// Actualizar producto por ID
 app.put("/api/actuproducto/:id", async (req, res) => {
     const { id } = req.params; 
     const datosActualizados = req.body;
