@@ -191,7 +191,7 @@ app.get("/api/filtroapellidos/:apeBusqueda", async (req, res) => {
 
   try {
     const apeBusqueda = req.params.apeBusqueda; 
-    console.log("Buscando nombre:", apeBusqueda);
+    console.log("Buscando apellido:", apeBusqueda);
 
     if (!apeBusqueda) {
       return res.status(400).json({ success: false, error: "Debes enviar un apellido" });
@@ -208,6 +208,45 @@ app.get("/api/filtroapellidos/:apeBusqueda", async (req, res) => {
 
 
     res.json({ success: true, mensaje:"todas las coincidencias", datos: filtroapellidos });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al encontrar", detalle: error.message });
+  }
+});
+
+
+
+
+app.get("/api/filtrotelefono/:tlfBusqueda", async (req, res) => {
+  const { clientes } = await connectToMongoDB();
+
+  try {
+    const tlfBusqueda = req.params.tlfBusqueda; 
+    console.log("Buscando apellido:", tlfBusqueda);
+
+    if (!tlfBusqueda) {
+      return res.status(400).json({ success: false, error: "Debes enviar un apellido" });
+    }
+
+    // busqueda parcial del campo nombre
+    const filtrotelefono = await clientes.find({ telefono: new RegExp(tlfBusqueda, 'i') }).toArray();
+    
+    console.log(filtrotelefono);
+
+    if (filtrotelefono.length=== 0 ) {
+      console.log("no hay coincidencias");
+      return res.json({ success: false, error:"no hay coincidencias"});
+    }
+
+    let lista_telefonos=[]
+
+    for(let cada_tele of filtrotelefono){
+      lista_telefonos.push(cada_tele.telefono);
+    }
+    console.log("solo telefonos",lista_telefonos);
+    
+
+    res.json({ success: true, mensaje:"todas las coincidencias", datos: lista_telefonos });
 
   } catch (error) {
     res.status(500).json({ success: false, error: "Error al encontrar", detalle: error.message });
