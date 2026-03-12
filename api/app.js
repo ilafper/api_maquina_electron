@@ -256,32 +256,37 @@ app.get("/api/filtrotelefono/:tlfBusqueda", async (req, res) => {
 
 
 
+app.get("/api/filtrocorreo/:correoBusqueda", async (req, res) => {
+  const { clientes } = await connectToMongoDB();
+
+  try {
+    const correoBusqueda = req.params.correoBusqueda; 
+    console.log("Buscando correo:", correoBusqueda);
+
+    if (!correoBusqueda) {
+      return res.status(400).json({ success: false, error: "Debes enviar un apellido" });
+    }
+
+    // busqueda parcial del campo correo
+    const filtrocorreo = await clientes.find({ correo: new RegExp(correoBusqueda, 'i') }).toArray();
+    
+    console.log(filtrocorreo);
+
+    if (filtrocorreo.length=== 0 ) {
+      console.log("no hay coincidencias");
+      return res.json({ success: false, error:"no hay coincidencias"});
+    }
+    
+
+    res.json({ success: true, mensaje:"todas las coincidencias", datos: filtrocorreo });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al encontrar", detalle: error.message });
+  }
+});
 
 
 
-
-
-// // Actualizar producto por ID
-// app.put("/api/actuproducto/:id", async (req, res) => {
-//     const { id } = req.params; 
-//     const datosActualizados = req.body;
-//     try {
-//         const { productos } = await connectToMongoDB();
-//         const resultado = await productos.updateOne(
-//             { _id: new ObjectId(id) }, 
-//             { $set: datosActualizados }
-//         );
-
-//         if (resultado.matchedCount === 0) {
-//             return res.status(404).json({ error: "Producto no encontrado" });
-//         }
-
-//         res.json({ mensaje: "Producto actualizado ISISISIS" });
-//     } catch (error) {
-//         console.error("NONNNONONO", error);
-//         res.status(500).json({ error: "Error servidor nONONONO" });
-//     }
-// });
 
 
 
